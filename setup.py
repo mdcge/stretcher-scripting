@@ -11,7 +11,7 @@ args = parser.parse_args()
 
 def list_ports():
     print("Available ports:\n")
-    ports = list(prts.comports())  # create a list of com ['COM1','COM2']
+    ports = list(prts.comports())
     for i, port in enumerate(ports):
         print(f"Device {port.device} with name {port.name}   -> ({i})")
     return ports
