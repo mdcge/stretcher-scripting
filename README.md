@@ -42,17 +42,14 @@ Some things to keep in mind when controlling the stretcher from a script:
 
 - Once the script reaches its end, the stretcher will immediately stop any action it was performing. It is therefore advisable to use the `sleep` command liberally. This is not a problem if interfacing with the stretcher from the python prompt directly.
 - The connection to the serial port seems to need about 5 seconds to establish properly. A `sleep(5)` is recommended just after the opening the serial connection.
-- ${\color{red}\text{[STILL TESTING]}}$ If a new command is written to the serial port before the previous one has finished, it will store it and perform it when the previous one has finished. However, if yet another command is written before the original one has completed, it will overwrite any other commands waiting in the queue.
+- ${\color{red}\text{[STILL TESTING]}}$ If a new command is written to the serial port before the previous one has finished, it will store it and perform it when the previous one has finished. However, if yet another command is written before the original one has completed, it seems that nothing will happen.
 - The `IDXX` command must always be called as the first command of a script, otherwise no other commands will be registered by the stretcher.
 
 ## Scripts
 
 ### `command.py`
 
-The `command.py` script can be used to submit a single command to the stretcher. It takes 3 command-line arguments:
+The `command.py` script can be used to submit commands to the stretcher, in an interactive manner. It takes 2 command-line arguments:
 
 - `-p`/`--port`: name of the port to connect to (obtained with `setup.py`)
-- `-c`/`--command`: command to pass to the stretcher
 - `-br`/`--baud-rate` [optional]: baud rate of the connection (default = 115200) 
-
-The `command.py` script will sleep for an hour after the desired command is performed. In most cases, this will be unwanted, so just interrupt the script (with `C-c` for example).
