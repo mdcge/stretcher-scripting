@@ -10,6 +10,12 @@ If you are not using Nix, you will need the following prerequisites:
 
 - `pyserial`
 
-## Necessary parameters
+## Setting up the connection
+
+The first step is to establish the connection with the stretcher. To do this, the `setup.py` script can be used in the following ways:
+
+- `python setup.py --list-ports`: lists the ports available to the machine.
+- `python setup.py --port-index <idx>`: connects to the serial port of index `idx`. The indices of each port are shown with the `--list-ports` flag.
+- 
 
 The baudrate (115200 for example) and port (COM4 for example) need to be known to establish the serial port connection.
