@@ -4,7 +4,6 @@ import time
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-p", "--port", help="Port name", type=str)
-parser.add_argument("-c", "--command", help="Stretcher command", type=str)
 parser.add_argument("-br", "--baud-rate", help="Baud rate of the connection", type=int, default=115200)
 args = parser.parse_args()
 
