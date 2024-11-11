@@ -44,6 +44,7 @@ Some things to keep in mind when controlling the stretcher from a script:
 - The connection to the serial port seems to need about 5 seconds to establish properly. A `sleep(5)` is recommended just after the opening the serial connection.
 - ${\color{red}\text{[STILL TESTING]}}$ If a new command is written to the serial port before the previous one has finished, it will store it and perform it when the previous one has finished. However, if yet another command is written before the original one has completed, it seems that nothing will happen.
 - The `IDXX` command must always be called as the first command of a script, otherwise no other commands will be registered by the stretcher.
+- The `M155` command takes about 1 second to run. This means that running another `M155` within a second will not register this second measurement command. The same applies for a reading operation, such as `readlines()`: it will not record the output from the last measurement command if it is called within a second of it.
 
 ## Scripts
 
@@ -63,3 +64,17 @@ The `periodic_measurements.py` script can be used to set the stretcher to a give
 - `-f`/`--force`: force to set the stretcher to
 - `-dp`/`--data-points`: number of measurements to perform in total
 - `-s`/`--sleep-time`: time between measurements
+
+It will return to the home position after the last measurement is complete and it has written the measurements to `measurements.csv`.
+
+## Useful information
+
+### Reference times
+
+| Material | Movement | Time |
+| :----: | :----: | :----: |
+| Steel wire | To 5N (from home) | ~32s |
+| Steel wire | To 15N (from home) | ~32s |
+| Steel wire | To 25N (from home) | ~35s |
+
+This can be useful for informing the length of `sleep` commands.
