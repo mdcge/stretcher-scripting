@@ -53,3 +53,13 @@ The `command.py` script can be used to submit commands to the stretcher, in an i
 
 - `-p`/`--port`: name of the port to connect to (obtained with `setup.py`)
 - `-br`/`--baud-rate` [optional]: baud rate of the connection (default = 115200) 
+
+### `periodic_measurements.py`
+
+The `periodic_measurements.py` script can be used to set the stretcher to a given force, then take measurements of the system at constant intervals. The command-line arguments available are:
+
+- `-p`/`--port`: name of the port to connect to (obtained with `setup.py`)
+- `-br`/`--baud-rate` [optional]: baud rate of the connection (default = 115200) 
+- `-f`/`--force`: force to set the stretcher to
+- `-dp`/`--data-points`: number of measurements to perform in total
+- `-s`/`--sleep-time`: time between measurements
