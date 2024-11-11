@@ -41,3 +41,8 @@ for i in range(args.data_points):
 # Write measurements to file
 time.sleep(1)
 output = ser.readlines()
+measurements = list(map(lambda x: x.decode("utf-8"), list(filter(lambda x: x[:3] == b"CFN", output))))
+with open("measurements.csv", 'w') as f:
+    for m in measurements:
+        f.write(m)
+        f.write("\n")
