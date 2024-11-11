@@ -38,11 +38,15 @@ for i in range(args.data_points):
     print(f"Taking measurement {i+1} of {args.data_points}")
     ser.write(b"M155")
 
-# Write measurements to file
+# Write measurements to file ---
 time.sleep(1)
 output = ser.readlines()
-measurements = list(map(lambda x: x.decode("utf-8"), list(filter(lambda x: x[:3] == b"CFN", output))))
+measurements = list(map(lambda x: x.strip(), list(map(lambda x: x.decode("utf-8"), list(filter(lambda x: x[:3] == b"CFN", output))))))
 with open("measurements.csv", 'w') as f:
     for m in measurements:
-        f.write(m)
-        f.write("\n")
+        f.write(m + "\n")
+
+# Return stretcher to home position ---
+ser.write(b"G28")
+time.sleep(20)
+ser.close()
