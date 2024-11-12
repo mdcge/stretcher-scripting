@@ -45,6 +45,8 @@
                 ps.pytest
                 ps.numpy
                 ps.pyserial
+                ps.matplotlib
+                ps.scipy
                 ps.python-lsp-server
             ])));
 
