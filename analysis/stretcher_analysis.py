@@ -27,7 +27,7 @@ def group_adaptive(data, g, group_size=60, ratio=0.5):
 def find_mean_mode_limit(data, group_size=60, ratio=0.5):
     for i in range(len(data)):
         if i+group_size == len(data):
-            return -1
+            return np.infty
         elements = set(data[i:i+group_size])
         ms, cs = [], []
         for e in elements:
@@ -59,16 +59,41 @@ for i, name in enumerate(["A", "k", "a", "b"]):
 
 
 # Plot ---
-plt.plot(times_PTFE[ranges_PTFE[0]:ranges_PTFE[1]], forces_PTFE[ranges_PTFE[0]:ranges_PTFE[1]], 'o', color=(0.3,0.3,1), markersize=3, label="with PTFE")
-plt.plot(group_mean(times_PTFE, 15), group_adaptive(forces_PTFE, 15), 'go', markersize=6, label="with PTFE")
-# plt.plot(times_no_PTFE[ranges_no_PTFE[0]:ranges_no_PTFE[1]]/60, forces_no_PTFE[ranges_PTFE[0]:ranges_PTFE[1]], '^', color=(1,0.3,0.3), markersize=3, label="without PTFE")
+plt.plot(times_PTFE[ranges_PTFE[0]:ranges_PTFE[1]], forces_PTFE[ranges_PTFE[0]:ranges_PTFE[1]],
+         'o',
+         color=(0,0,1,0.3),
+         markersize=3,
+         markeredgewidth=0.0,
+         zorder=3,
+         label="with PTFE (raw)")
+plt.plot(group_mean(times_PTFE, 15), group_adaptive(forces_PTFE, 15),
+         'bo',
+         markersize=4,
+         markeredgecolor='k',
+         markeredgewidth=0.6,
+         zorder=3,
+         label="with PTFE (smoothed)")
+plt.plot(times_no_PTFE[ranges_no_PTFE[0]:ranges_no_PTFE[1]], forces_no_PTFE[ranges_PTFE[0]:ranges_PTFE[1]],
+         '^',
+         color=(1,0,0,0.3),
+         markersize=3,
+         markeredgewidth=0.0,
+         zorder=3,
+         label="without PTFE (raw)")
+plt.plot(group_mean(times_no_PTFE, 15), group_adaptive(forces_no_PTFE, 15, ratio=0.45),
+         'ro',
+         markersize=4,
+         markeredgecolor='k',
+         markeredgewidth=0.6,
+         zorder=3,
+         label="without PTFE (smoothed)")
 
 # plt.plot(times_PTFE, log_decay(times_PTFE, np.float64(0.38), np.float64(55), np.float64(5), np.float64(25)), 'k')
 
-plt.plot(times_PTFE, log_decay(times_PTFE, *popt_PTFE), 'b')
-# plt.plot(times_no_PTFE/60, log_decay(times_no_PTFE, *popt_no_PTFE), 'r')
+plt.plot(times_PTFE, log_decay(times_PTFE, *popt_PTFE), 'b', zorder=2.5)
+plt.plot(times_no_PTFE, log_decay(times_no_PTFE, *popt_no_PTFE), 'r', zorder=2.5)
 
-plt.grid()
+plt.grid(zorder=-5)
 plt.title("Force measured at set distance")
 plt.xlabel("Time (hours)")
 plt.ylabel("Force (N)")
