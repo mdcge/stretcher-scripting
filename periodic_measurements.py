@@ -31,20 +31,27 @@ ser.write(bytes(command, encoding='utf-8'))
 time.sleep(40)
 print(" done")
 
+# Open output file ---
+with open("measurements.csv", 'w') as f:
+    f.write("")
+
 # Take measurements ---
 for i in range(args.data_points):
+    # Wait
     if i != 0:
-        time.sleep(args.sleep_time)
+        time.sleep(args.sleep_time - 1)
+
+    # Take measurement
     print(f"Taking measurement {i+1} of {args.data_points}")
     ser.write(b"M155")
 
-# Write measurements to file ---
-time.sleep(1)
-output = ser.readlines()
-measurements = list(map(lambda x: x.strip(), list(map(lambda x: x.decode("utf-8"), list(filter(lambda x: x[:3] == b"CFN", output))))))
-with open("measurements.csv", 'w') as f:
-    for m in measurements:
-        f.write(m + "\n")
+    # Write output
+    time.sleep(1)
+    output = ser.readlines()
+    measurements = list(map(lambda x: x.strip(), list(map(lambda x: x.decode("utf-8"), list(filter(lambda x: x[:3] == b"CFN", output))))))
+    with open("measurements.csv", 'a') as f:
+        for m in measurements:
+            f.write(m + "\n")
 
 # Return stretcher to home position ---
 ser.write(b"G28")
