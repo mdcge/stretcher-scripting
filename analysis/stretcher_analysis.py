@@ -11,8 +11,8 @@ forces_no_PTFE, weights_no_PTFE, displacements_no_PTFE = rs.read_stretcher_file(
 times_PTFE = np.arange(len(forces_PTFE))/60
 times_no_PTFE = np.arange(len(forces_no_PTFE))/60
 
-def log_decay(x, A, k, a, B):
-    return -A * np.log(k*x + a) + B
+def log_decay(x, A, a, B):
+    return -A * np.log(x + a) + B
 
 def group_mean(data, g):
     return np.array([np.mean(data[i:i+g]) for i in range(0, len(data), g)])
@@ -45,16 +45,15 @@ ranges_no_PTFE = (0, -1)
 
 
 # Fit log decay ---
-# popt_PTFE, pcov_PTFE = curve_fit(log_decay, group_adaptive(times_PTFE, 15), group_adaptive(forces_PTFE, 15), p0=[0.4, 35, 10, 26])
-popt_PTFE, pcov_PTFE = curve_fit(log_decay, times_PTFE, forces_PTFE, p0=[0.4, 35, 90, 26])
+popt_PTFE, pcov_PTFE = curve_fit(log_decay, times_PTFE, forces_PTFE)
 popt_no_PTFE, pcov_no_PTFE = curve_fit(log_decay, times_no_PTFE, forces_no_PTFE)
 
 print("With PTFE:\n")
-for i, name in enumerate(["A", "k", "a", "b"]):
+for i, name in enumerate(["A", "a", "B"]):
     print(f"{name} = {popt_PTFE[i]:.2f} +- {np.sqrt(np.diag(pcov_PTFE))[i]:.2f}")
 print()
 print("Without PTFE:\n")
-for i, name in enumerate(["A", "k", "a", "b"]):
+for i, name in enumerate(["A", "a", "B"]):
     print(f"{name} = {popt_no_PTFE[i]:.2f} +- {np.sqrt(np.diag(pcov_no_PTFE))[i]:.2f}")
 
 
@@ -74,7 +73,7 @@ plt.plot(group_mean(times_PTFE, 15), group_adaptive(forces_PTFE, 15),
          zorder=3,
          label="with PTFE (smoothed)")
 plt.plot(times_no_PTFE[ranges_no_PTFE[0]:ranges_no_PTFE[1]], forces_no_PTFE[ranges_PTFE[0]:ranges_PTFE[1]],
-         '^',
+         'o',
          color=(1,0,0,0.3),
          markersize=3,
          markeredgewidth=0.0,
