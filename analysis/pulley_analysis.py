@@ -21,7 +21,7 @@ def plot_data(times, forces, group_size,
               smooth_label="smooth data",
               raw_format='o',
               raw_linewidth=0.2,
-              smooth_marker_edge_width=0.4,
+              smooth_marker_edge_width=0.4):
     raw_times, raw_forces = times[ranges[0]:ranges[1]], forces[ranges[0]:ranges[-1]]
     smooth_times, smooth_forces = group_mean(times[ranges[0]:ranges[1]], group_size)[ranges[0]//group_size:ranges[1]//group_size], group_mean(forces[ranges[0]:ranges[1]], group_size)[ranges[0]//group_size:ranges[-1]//group_size]
     raw_points, = plt.plot(raw_times, raw_forces,
@@ -36,6 +36,7 @@ def plot_data(times, forces, group_size,
                               'o',
                               color=smooth_colour,
                               markersize=smooth_marker_size,
+                              markeredgecolor='k',
                               markeredgewidth=smooth_marker_edge_width,
                               zorder=4,
                               label=smooth_label)
@@ -46,6 +47,13 @@ def plot_data(times, forces, group_size,
 times_5N_1, forces_5N_1, _, _ = get_data("/home/max/phd/fibre-measurements/data/stretching/stretcher_steel_pulley_5N_run_01.csv")
 true_force_5N_1 = (497.349 / 1000) * 9.81
 
-plot_data(times_5N_1, forces_5N_1, 50, ranges=(1,-1), true_force=true_force_5N_1)
+plot_data(times_5N_1, forces_5N_1, 50, ranges=(1,-1), raw_label="", smooth_label="run 1")
+plt.plot([min(times_5N_1), max(times_5N_1)], [true_force_5N_1]*2, 'k--', label="true force")
+
+plt.title("Force measured by stretcher force sensor\nwith tension applied by a weight on a pulley")
+plt.xlabel("Time (hours)")
+plt.ylabel("Force (N)")
 plt.ylim([4, 5.3])
+plt.legend()
+plt.savefig("/home/max/phd/fibre-measurements/figures/stretching/steel-wire-pulley-5N.pdf", bbox_inches='tight')
 plt.show()
