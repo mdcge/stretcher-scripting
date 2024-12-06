@@ -50,7 +50,7 @@ for i in range(args.data_points*10):
     output = ser.readlines()
     measurements = list(map(lambda x: x.strip(), list(map(lambda x: x.decode("utf-8"), list(filter(lambda x: x[:3] == b"CFN", output))))))
     measured_force = float(measurements.split('N')[1].split('W')[0])
-    force_command = f"G00 X{int(100 * (args.force - measured_force))}"
+    force_command = f"G00 X{int(100 * (args.force - measured_force)) if measured_force > 0 else 0}"
     ser.write(bytes(force_command, encoding='utf-8'))
     time.sleep(0.5)
 
